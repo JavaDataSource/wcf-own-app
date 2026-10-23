@@ -9,5 +9,5 @@ import {
 export type Entity = Record<string, any>;
 
 export class ValidationError extends Error {
-    statusCode = 666;
+    statusCode = 777;
 }
