@@ -141,6 +141,7 @@
 .neo-shell[data-module="consulting"] { --mix-a: var(--neo-ochre); --mix-b: var(--neo-rose); --mix-c: var(--neo-teal); --mix-d: var(--neo-orange); --mix-e: var(--neo-blue); }
 .neo-shell[data-module="fitness"] { --mix-a: var(--neo-leaf); --mix-b: var(--neo-orange); --mix-c: var(--neo-blue); --mix-d: var(--neo-sun); --mix-e: var(--neo-rose); }
 .neo-shell[data-module="diet"] { --mix-a: var(--neo-orange); --mix-b: var(--neo-leaf); --mix-c: var(--neo-sun); --mix-d: var(--neo-rose); --mix-e: var(--neo-teal); }
+.neo-shell[data-module="reading"] { --mix-a: var(--neo-rose); --mix-b: var(--neo-blue); --mix-c: var(--neo-leaf); --mix-d: var(--neo-sun); --mix-e: var(--neo-ochre); }
 .neo-shell[data-module="entertainment"] { --mix-a: var(--neo-blue); --mix-b: var(--neo-coral); --mix-c: var(--neo-sun); --mix-d: var(--neo-teal); --mix-e: var(--neo-rose); }
 .neo-shell[data-module="settings"] { --mix-a: var(--neo-stone); --mix-b: var(--neo-teal); --mix-c: var(--neo-coral); --mix-d: var(--neo-blue); --mix-e: var(--neo-sun); }
 
@@ -307,6 +308,11 @@
 .neo-shell .neo-nav-emblem[data-module="fitness"] { --nav-emblem-x: 100%; --nav-emblem-y: 50%; }
 .neo-shell .neo-nav-emblem[data-module="diet"] { --nav-emblem-x: 0%; --nav-emblem-y: 100%; }
 .neo-shell .neo-nav-emblem[data-module="entertainment"] { --nav-emblem-x: 50%; --nav-emblem-y: 100%; }
+.neo-shell .neo-nav-emblem[data-module="reading"] {
+  background-image: url("/assets/module-icons/reading-v1.svg");
+  background-size: 84% 84%;
+  background-position: center;
+}
 .neo-shell .neo-nav-emblem[data-module="settings"] { --nav-emblem-x: 100%; --nav-emblem-y: 100%; }
 .neo-shell .nav-link[href="/"] { --link-accent: var(--neo-coral); }
 .neo-shell .nav-link[href="/today"] { --link-accent: var(--neo-sun); }
@@ -315,6 +321,7 @@
 .neo-shell .nav-link[href="/consulting"] { --link-accent: var(--neo-ochre); }
 .neo-shell .nav-link[href="/fitness"] { --link-accent: var(--neo-leaf); }
 .neo-shell .nav-link[href="/diet"] { --link-accent: var(--neo-orange); }
+.neo-shell .nav-link[href="/reading"] { --link-accent: var(--neo-rose); }
 .neo-shell .nav-link[href="/entertainment"] { --link-accent: var(--neo-blue); }
 .neo-shell .nav-link[href="/settings"] { --link-accent: var(--neo-stone); }
 .neo-shell .nav-link:hover {
@@ -469,8 +476,14 @@
 .neo-shell[data-module="consulting"] { --module-stamp: "04 / CLIENT"; --emblem-x: 50%; --emblem-y: 50%; }
 .neo-shell[data-module="fitness"] { --module-stamp: "05 / TRAIN"; --emblem-x: 100%; --emblem-y: 50%; }
 .neo-shell[data-module="diet"] { --module-stamp: "06 / FUEL"; --emblem-x: 0%; --emblem-y: 100%; }
-.neo-shell[data-module="entertainment"] { --module-stamp: "07 / PLAY"; --emblem-x: 50%; --emblem-y: 100%; }
-.neo-shell[data-module="settings"] { --module-stamp: "08 / SYSTEM"; --emblem-x: 100%; --emblem-y: 100%; }
+.neo-shell[data-module="reading"] { --module-stamp: "07 / READ"; --emblem-x: 50%; --emblem-y: 100%; }
+.neo-shell[data-module="entertainment"] { --module-stamp: "08 / PLAY"; --emblem-x: 50%; --emblem-y: 100%; }
+.neo-shell[data-module="settings"] { --module-stamp: "09 / SYSTEM"; --emblem-x: 100%; --emblem-y: 100%; }
+.neo-shell[data-module="reading"] .page-header::after {
+  background-image: url("/assets/module-icons/reading-v1.svg");
+  background-size: 48% 48%;
+  background-position: center 34%;
+}
 .neo-shell .page-header > div:first-child { display: block; min-width: 0; }
 .neo-shell .page-heading-copy { display: block; min-width: 0; }
 .neo-shell .page-header-icon,
@@ -840,6 +853,7 @@
 .neo-shell .summary-tile:nth-child(4) { --tile-accent: var(--neo-leaf); }
 .neo-shell .summary-tile:nth-child(5) { --tile-accent: var(--neo-orange); }
 .neo-shell .summary-tile:nth-child(6) { --tile-accent: var(--neo-blue); }
+.neo-shell .summary-tile:nth-child(7) { --tile-accent: var(--neo-rose); }
 .neo-shell .summary-tile:nth-child(1),
 .neo-shell .summary-tile:nth-child(4) { grid-column: span 5; }
 .neo-shell .summary-tile:nth-child(2),
@@ -1009,6 +1023,29 @@
 .neo-shell .now-playing > div { border: var(--neo-line-heavy); border-radius: 2px; background: var(--neo-accent); color: var(--neo-ink); box-shadow: var(--neo-hard-shadow-small); }
 .neo-shell .next-goal { border-left: 4px solid var(--neo-accent); border-radius: 0; background: var(--neo-paper-deep); }
 
+/* Reading ---------------------------------------------------------------- */
+
+.neo-shell .reading-stats { gap: 18px; }
+.neo-shell .reading-stat { border: var(--neo-line-heavy); border-radius: 2px; background: var(--neo-sheet); box-shadow: var(--neo-hard-shadow-small); }
+.neo-shell .reading-stat:nth-child(1) { background: color-mix(in srgb, var(--mix-a) 15%, var(--neo-sheet)); }
+.neo-shell .reading-stat:nth-child(2) { background: color-mix(in srgb, var(--mix-b) 15%, var(--neo-sheet)); }
+.neo-shell .reading-stat:nth-child(3) { background: color-mix(in srgb, var(--mix-c) 15%, var(--neo-sheet)); }
+.neo-shell .reading-stat:nth-child(4) { background: color-mix(in srgb, var(--mix-d) 15%, var(--neo-sheet)); }
+.neo-shell .book-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 18px; }
+.neo-shell .book-card { grid-column: span 6; border: var(--neo-line-heavy); border-radius: 2px; background: var(--neo-sheet); box-shadow: 4px 4px 0 var(--neo-shadow); }
+.neo-shell .book-card:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--neo-shadow); }
+.neo-shell .book-cover { border-radius: 0; background: var(--mix-a); color: var(--neo-ink); }
+.neo-shell .book-card:nth-child(4n + 1) .book-cover { background: var(--neo-blue); }
+.neo-shell .book-card:nth-child(4n + 2) .book-cover { background: var(--neo-rose); }
+.neo-shell .book-card:nth-child(4n + 3) .book-cover { background: var(--neo-sun); }
+.neo-shell .book-card:nth-child(4n + 4) .book-cover { background: var(--neo-leaf); }
+.neo-shell .book-cover .badge { background: var(--neo-sheet); border-color: var(--neo-ink); color: var(--neo-ink); }
+.neo-shell .reading-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 26px; }
+.neo-shell .reading-chart { border: var(--neo-line); border-radius: 1px; background: var(--neo-sheet); padding: 10px; }
+.neo-shell .reading-note-list article { border: var(--neo-line); border-radius: 1px; background: var(--neo-sheet); }
+.neo-shell .reading-note-list blockquote { border-left: 4px solid var(--mix-a); }
+.neo-shell .reading-session-list article { border-bottom: var(--neo-line); }
+
 .neo-shell .data-file-panel,
 .neo-shell .export-panel {
   border: var(--neo-line-heavy);
@@ -1066,7 +1103,9 @@
   .neo-shell .summary-tile,
   .neo-shell .summary-tile:nth-child(n) { grid-column: span 6; }
   .neo-shell .game-card,
-  .neo-shell .game-card:nth-child(n) { grid-column: span 6; }
+  .neo-shell .game-card:nth-child(n),
+  .neo-shell .book-card,
+  .neo-shell .book-card:nth-child(n) { grid-column: span 6; }
 }
 
 @media (max-width: 900px) {
@@ -1097,6 +1136,7 @@
   .neo-shell .dashboard-grid,
   .neo-shell .fitness-grid,
   .neo-shell .settings-grid,
+  .neo-shell .reading-grid,
   .neo-shell .consult-layout,
   .neo-shell .workspace-split { grid-template-columns: 1fr; }
   .neo-shell .dashboard-aside { position: static; }
@@ -1124,9 +1164,12 @@
   .neo-shell .summary-tile,
   .neo-shell .summary-tile:nth-child(n),
   .neo-shell .game-card,
-  .neo-shell .game-card:nth-child(n) { grid-column: 1 / -1; }
+  .neo-shell .game-card:nth-child(n),
+  .neo-shell .book-card,
+  .neo-shell .book-card:nth-child(n) { grid-column: 1 / -1; }
   .neo-shell .media-kpis,
-  .neo-shell .nutrition-strip { grid-template-columns: 1fr 1fr; }
+  .neo-shell .nutrition-strip,
+  .neo-shell .reading-stats { grid-template-columns: 1fr 1fr; }
   .neo-shell .media-kpis > div,
   .neo-shell .nutrition-metric { border-bottom: var(--neo-line); }
   .neo-shell .media-analytics-grid,

@@ -12,12 +12,13 @@
 | 咨询 | `clients`、`consulting_projects`、`consulting_interactions`、`consulting_deliverables`、`consulting_followups`、`consulting_time_entries` | 客户、项目、沟通、交付、跟进、时长和费用 |
 | 健身 | `workout_templates`、`workout_template_exercises`、`workouts`、`workout_exercises`、`workout_sets`、`body_metrics` | 训练部位、模板与实际训练快照、逐组数据和身体指标 |
 | 饮食 | `nutrition_targets`、`foods`、`meals`、`meal_items` | 生效日营养目标、常用食物、计划/实际餐食和营养明细 |
+| 阅读 | `books`、`reading_sessions`、`reading_notes` | 书架、阅读状态与页数进度、阅读时长/页数记录和读书笔记 |
 | 娱乐 | `entertainment_items`、`play_sessions` | 娱乐清单、状态、进度、目标和游玩时长 |
 | 系统 | `settings`、`trash_entries`、`schema_migrations` | 使用偏好、回收站索引和数据库版本 |
 
 ## 首页、计划和来源记录
 
-`plan_items` 只保存执行安排。`source_module`、`source_entity_type`、`source_entity_id` 指向业务记录；接口读取状态和首页时实时解析来源标题，因此修改业务标题不会生成重复记录或保留过期标题。当前支持的来源包括自媒体内容、开发工作项、咨询交付/跟进、训练、餐食和娱乐项目。
+`plan_items` 只保存执行安排。`source_module`、`source_entity_type`、`source_entity_id` 指向业务记录；接口读取状态和首页时实时解析来源标题，因此修改业务标题不会生成重复记录或保留过期标题。当前支持的来源包括自媒体内容、开发工作项、咨询交付/跟进、训练、餐食、书籍和娱乐项目。
 
 首页不保存摘要副本。`server/dashboard.ts` 每次从今日计划和业务集合生成时间线、待安排、关注项和模块摘要。
 

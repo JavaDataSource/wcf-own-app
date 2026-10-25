@@ -78,6 +78,7 @@
   --palette-apricot: #b27648;
   --palette-coral: #ad6257;
   --palette-indigo: #69729c;
+  --palette-plum: #7b6f96;
   --palette-graphite: #596970;
   --danger: #a33f3a;
   --danger-soft: rgba(163, 63, 58, .12);
@@ -202,6 +203,7 @@
   --palette-apricot: #d79a68;
   --palette-coral: #d9877c;
   --palette-indigo: #939cc7;
+  --palette-plum: #b3a3cf;
   --palette-graphite: #9babb1;
 
   --popover-bg: color-mix(in srgb, var(--accent) 6%, rgba(30, 39, 45, .90));
@@ -235,6 +237,7 @@
 .app-shell[data-module="consulting"] { --module-tone: var(--palette-amber); }
 .app-shell[data-module="fitness"] { --module-tone: var(--palette-sage); }
 .app-shell[data-module="diet"] { --module-tone: var(--palette-apricot); }
+.app-shell[data-module="reading"] { --module-tone: var(--palette-plum); }
 .app-shell[data-module="entertainment"] { --module-tone: var(--palette-indigo); }
 .app-shell[data-module="settings"] { --module-tone: var(--palette-graphite); }
 
@@ -246,6 +249,7 @@
 [data-tone="apricot"] { --icon-tone: var(--palette-apricot); }
 [data-tone="coral"] { --icon-tone: var(--palette-coral); }
 [data-tone="indigo"] { --icon-tone: var(--palette-indigo); }
+[data-tone="plum"] { --icon-tone: var(--palette-plum); }
 [data-tone="graphite"] { --icon-tone: var(--palette-graphite); }
 
 /* --- 3. 基础 ------------------------------------------------------------- */
@@ -1179,6 +1183,7 @@ input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px;
 .summary-tile[data-module="consulting"] { --tile-tone: var(--palette-amber); }
 .summary-tile[data-module="fitness"] { --tile-tone: var(--palette-sage); }
 .summary-tile[data-module="diet"] { --tile-tone: var(--palette-apricot); }
+.summary-tile[data-module="reading"] { --tile-tone: var(--palette-plum); }
 .summary-tile[data-module="entertainment"] { --tile-tone: var(--palette-indigo); }
 .summary-top .module-artwork {
   width: 36px;
@@ -1688,7 +1693,94 @@ input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px;
 .session-list small, .session-list p, .session-list span { color: var(--text-soft); font-size: 10.5px; }
 .session-list p { margin: 0; }
 
-/* --- 10i. 数据与设置 ------------------------------------------------------ */
+/* --- 10i. 阅读 ------------------------------------------------------------ */
+
+.reading-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: var(--space-4) 0; }
+.reading-stat {
+  min-height: 82px;
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-inset);
+  background: var(--frosted-bg);
+  box-shadow: var(--frosted-sheen), var(--shadow-panel);
+  padding: 14px 16px;
+}
+.reading-stat > span { display: flex; align-items: center; gap: 6px; color: var(--text-soft); font-size: 10.5px; }
+.reading-stat > span svg { color: var(--module-tone); }
+.reading-stat strong { font: 640 18px/1.1 var(--font-ui); letter-spacing: -.03em; }
+.reading-stat small { color: var(--text-soft); font-size: 10.5px; font-weight: 500; }
+.reading-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 var(--space-4); }
+.reading-count { color: var(--text-soft); font-size: 10.5px; white-space: nowrap; }
+
+.book-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.book-card {
+  min-height: 232px;
+  display: grid;
+  grid-template-columns: 106px minmax(0, 1fr);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--frosted-bg);
+  box-shadow: var(--frosted-sheen), var(--shadow-panel);
+  overflow: hidden;
+  transition: transform var(--motion-control) var(--ease-out), border-color var(--motion-control) ease, box-shadow var(--motion-control) ease;
+}
+.book-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--module-tone) 32%, var(--border)); box-shadow: var(--frosted-sheen), 0 20px 44px -22px rgba(36, 62, 76, .36); }
+.book-cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  color: #eef2f8;
+  background: linear-gradient(158deg, color-mix(in srgb, var(--module-tone) 82%, #1a1f2e), color-mix(in srgb, var(--module-tone) 40%, #12161f));
+}
+.book-cover > div { display: grid; gap: 2px; min-width: 0; }
+.book-cover strong { font-size: 10.5px; font-weight: 620; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.book-cover span { font-size: 10px; opacity: .78; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.book-cover .badge { background: rgba(255, 255, 255, .17); border-color: rgba(255, 255, 255, .26); color: #f2f6fa; }
+.book-copy { display: grid; align-content: start; gap: 10px; min-width: 0; padding: 14px 16px; }
+.book-copy header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.book-copy header > div { display: grid; gap: 3px; min-width: 0; }
+.book-copy h3 { margin: 0; font-size: 15px; font-weight: 640; letter-spacing: -.025em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.book-copy header small {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-soft);
+  font-size: 10.5px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.book-progress { display: grid; gap: 5px; }
+.book-progress > div:first-child { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; color: var(--text-soft); font-size: 10.5px; }
+.book-progress strong { color: var(--text); font-size: 11px; font-weight: 620; }
+.book-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; color: var(--text-soft); }
+.book-meta span { display: flex; align-items: center; gap: 4px; font-size: 10.5px; }
+.book-actions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; }
+
+.reading-grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 14px; }
+.reading-grid .section + .section { margin-top: 0; }
+.reading-chart { margin-top: 8px; }
+.reading-note-list { display: grid; gap: 8px; }
+.reading-note-list article { display: grid; gap: 8px; border: 1px solid var(--border); border-radius: var(--radius-inset); background: var(--surface-sheet); padding: 12px 14px; }
+.reading-note-list header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.reading-note-list header > div:first-child { display: grid; gap: 3px; min-width: 0; }
+.reading-note-list strong { font-size: 11.5px; font-weight: 600; }
+.reading-note-list small { color: var(--text-soft); font-size: 10.5px; }
+.reading-note-actions { display: flex; gap: 2px; flex: 0 0 auto; }
+.reading-note-list blockquote { margin: 0; border-left: 2px solid var(--module-tone); padding-left: 10px; color: var(--text-soft); font-size: 10.5px; line-height: 1.6; }
+.reading-note-list p { margin: 0; font-size: 11px; line-height: 1.65; white-space: pre-wrap; }
+.reading-session-list { display: grid; }
+.reading-session-list article { display: grid; grid-template-columns: 190px 96px 66px minmax(0, 1fr) 32px; gap: 12px; align-items: center; border-bottom: 1px solid var(--border); padding: 9px 0; }
+.reading-session-list article:last-child { border-bottom: 0; }
+.reading-session-list article > div { display: grid; gap: 2px; min-width: 0; }
+.reading-session-list strong { font-size: 11.5px; font-weight: 570; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.reading-session-list small, .reading-session-list span, .reading-session-list p { color: var(--text-soft); font-size: 10.5px; }
+.reading-session-list p { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* --- 10j. 数据与设置 ------------------------------------------------------ */
 
 .data-file-panel { display: flex; gap: 14px; align-items: center; border-radius: var(--radius-inset); padding: 14px 16px; }
 .file-icon {
@@ -2009,6 +2101,7 @@ input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px;
   .media-analytics-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   .media-analytics-chart { border-left: 0; padding-left: 0; }
   .month-calendar { overflow-x: auto; }
-  .game-grid, .history-table, .meal-columns { grid-template-columns: 1fr; }
+  .game-grid, .history-table, .meal-columns, .book-grid, .reading-grid { grid-template-columns: 1fr; }
+  .reading-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .consult-grid, .fitness-grid, .settings-grid { gap: 12px; }
 }

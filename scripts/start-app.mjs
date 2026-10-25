@@ -45,6 +45,11 @@ if (canReuse(existingStatus)) {
 }
 
 if (existingStatus) {
+  if (!existingStatus.instanceId) {
+    console.error(`端口 ${port} 正被开发服务器或手动启动的服务占用（没有启动器记录）。`);
+    console.error("请先关闭正在运行的 npm run dev 或 npm start，再重新启动木子工作台。");
+    process.exit(1);
+  }
   console.log("检测到后台服务使用的是旧版页面资源，正在安全保存并自动更新……");
   await stopStaleService(existingStatus);
 }

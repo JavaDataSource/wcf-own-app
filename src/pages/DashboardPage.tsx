@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { Check, Clock, ArrowRight, NotePencil, CalendarBlank, Plus, Barbell, ListPlus, Bug, ForkKnife } from "@phosphor-icons/react";
+import { Check, Clock, ArrowRight, NotePencil, CalendarBlank, Plus, Barbell, ListPlus, Bug, ForkKnife, BookOpen } from "@phosphor-icons/react";
 import { api } from "../api";
 import { useWorkspace } from "../WorkspaceContext";
 import { localDate, formatDuration, formatDate, classNames } from "../utils";
@@ -14,6 +14,7 @@ const summaryMeta: Record<string, { title: string; route: string; module: Module
   consulting: { title: "咨询工作", route: "/consulting", module: "consulting", empty: "暂无待跟进事项" },
   fitness: { title: "健身计划", route: "/fitness", module: "fitness", empty: "暂无近期训练" },
   diet: { title: "饮食计划", route: "/diet", module: "diet", empty: "今天还没有餐食记录" },
+  reading: { title: "阅读", route: "/reading", module: "reading", empty: "暂无在读的书" },
   entertainment: { title: "游戏娱乐", route: "/entertainment", module: "entertainment", empty: "暂无正在进行的游戏" },
 };
 
@@ -76,6 +77,7 @@ export function DashboardPage() {
         <button onClick={() => navigate("/development?new=work-item")}><Bug size={17} />添加工作项</button>
         <button onClick={() => navigate("/fitness?new=workout")}><Barbell size={17} />记录训练</button>
         <button onClick={() => navigate("/diet?new=meal")}><ForkKnife size={17} />记录饮食</button>
+        <button onClick={() => navigate("/reading?new=session")}><BookOpen size={17} />记录阅读</button>
       </nav>
       <div className="dashboard-grid">
         <div className="dashboard-primary">
@@ -106,7 +108,7 @@ export function DashboardPage() {
   );
 }
 
-const sourceRoutes: Record<string, string> = { media: "/media", development: "/development", consulting: "/consulting", fitness: "/fitness", diet: "/diet", entertainment: "/entertainment" };
+const sourceRoutes: Record<string, string> = { media: "/media", development: "/development", consulting: "/consulting", fitness: "/fitness", diet: "/diet", reading: "/reading", entertainment: "/entertainment" };
 
 function PlanRow({ item, onComplete, onOpenSource }: { item: Record<string, any>; onComplete: () => Promise<any>; onOpenSource?: () => void }) {
   const done = item.status === "done";

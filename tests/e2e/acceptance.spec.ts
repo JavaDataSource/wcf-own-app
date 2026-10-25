@@ -8,7 +8,7 @@ async function create(request: APIRequestContext, collection: string, payload: R
   return (await response.json()).data;
 }
 
-test("opens locally, uses no external runtime resources, and reaches all nine pages", async ({ page }) => {
+test("opens locally, uses no external runtime resources, and reaches all ten pages", async ({ page }) => {
   const externalRequests: string[] = [];
   page.on("request", (request) => {
     const url = new URL(request.url());
@@ -19,7 +19,7 @@ test("opens locally, uses no external runtime resources, and reaches all nine pa
   await expect(page.getByRole("heading", { name: /从重点开始/ })).toBeVisible();
   const destinations = [
     ["首页总览", /从重点开始/], ["今日计划", "今日计划"], ["自媒体", "自媒体"], ["开发工作", "开发工作"],
-    ["咨询工作", "咨询工作"], ["健身计划", "健身计划"], ["饮食计划", "饮食计划"], ["游戏娱乐", "游戏娱乐"], ["数据与设置", "数据与设置"],
+    ["咨询工作", "咨询工作"], ["健身计划", "健身计划"], ["饮食计划", "饮食计划"], ["阅读", "阅读"], ["游戏娱乐", "游戏娱乐"], ["数据与设置", "数据与设置"],
   ] as const;
   for (const [link, heading] of destinations) {
     await page.getByRole("link", { name: link }).click();
@@ -147,20 +147,20 @@ test("uses a distinct local AI-generated icon for every module in one consistent
   await expect(page.locator(".page-header-icon .module-artwork")).toBeVisible();
   await expect(page.locator(".toolbar-page-icon .module-artwork")).toBeVisible();
   const navigationIcons = page.locator(".nav-link > .module-artwork");
-  await expect(navigationIcons).toHaveCount(9);
+  await expect(navigationIcons).toHaveCount(10);
   const iconState = await navigationIcons.evaluateAll((icons) => ({
     sources: icons.map((icon) => (icon as HTMLImageElement).getAttribute("src")),
     allLoaded: icons.every((icon) => (icon as HTMLImageElement).complete && (icon as HTMLImageElement).naturalWidth >= 500),
     radii: icons.map((icon) => Number.parseFloat(getComputedStyle(icon).borderTopLeftRadius)),
   }));
-  expect(new Set(iconState.sources).size).toBe(9);
-  expect(iconState.sources.every((source) => source?.startsWith("/assets/module-icons/") && source.endsWith("-v1.webp"))).toBeTruthy();
+  expect(new Set(iconState.sources).size).toBe(10);
+  expect(iconState.sources.every((source) => source?.startsWith("/assets/module-icons/") && /-v1\.(webp|svg)$/.test(source))).toBeTruthy();
   expect(iconState.allLoaded).toBeTruthy();
   expect(Math.min(...iconState.radii)).toBeGreaterThanOrEqual(9);
 
   await page.getByRole("button", { name: "快速新建" }).click();
-  await expect(page.locator(".quick-option-icon")).toHaveCount(6);
-  await expect(page.locator(".quick-option-icon .module-artwork")).toHaveCount(6);
+  await expect(page.locator(".quick-option-icon")).toHaveCount(7);
+  await expect(page.locator(".quick-option-icon .module-artwork")).toHaveCount(7);
   const iconRadius = await page.locator(".quick-option-icon").first().evaluate((element) =>
     Number.parseFloat(getComputedStyle(element).borderTopLeftRadius),
   );
@@ -169,7 +169,7 @@ test("uses a distinct local AI-generated icon for every module in one consistent
 
 test("keeps Neo isolated, multicolor and overflow-free across all pages and target viewports", async ({ page, request }) => {
   test.setTimeout(120_000);
-  const pages = ["/", "/today", "/media", "/development", "/consulting", "/fitness", "/diet", "/entertainment", "/settings"];
+  const pages = ["/", "/today", "/media", "/development", "/consulting", "/fitness", "/diet", "/reading", "/entertainment", "/settings"];
   const viewports = [
     { width: 1440, height: 900 },
     { width: 1728, height: 1117 },
@@ -204,7 +204,7 @@ test("keeps Neo isolated, multicolor and overflow-free across all pages and targ
           };
         });
         expect(layout.pageWidth).toBeLessThanOrEqual(layout.viewportWidth);
-        expect(layout.emblemImage).toContain("module-emblems.png");
+        expect(layout.emblemImage).toContain(path === "/reading" ? "reading-v1.svg" : "module-emblems.png");
         expect(layout.blurredElements).toBe(0);
         expect(new Set(layout.palette).size).toBe(5);
       }
@@ -212,12 +212,18 @@ test("keeps Neo isolated, multicolor and overflow-free across all pages and targ
 
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/");
-    await expect(page.locator(".neo-nav-emblem")).toHaveCount(9);
-    const emblemState = await page.locator(".neo-nav-emblem").evaluateAll((emblems) => ({
-      allUseSprite: emblems.every((emblem) => getComputedStyle(emblem).backgroundImage.includes("module-emblems.png")),
-      positions: emblems.map((emblem) => getComputedStyle(emblem).backgroundPosition),
-    }));
-    expect(emblemState.allUseSprite).toBe(true);
+    await expect(page.locator(".neo-nav-emblem")).toHaveCount(10);
+    const emblemState = await page.locator(".neo-nav-emblem").evaluateAll((emblems) => {
+      const sprite = emblems.filter((emblem) => emblem.getAttribute("data-module") !== "reading");
+      return {
+        allUseExpectedArt: emblems.every((emblem) => {
+          const image = getComputedStyle(emblem).backgroundImage;
+          return emblem.getAttribute("data-module") === "reading" ? image.includes("reading-v1.svg") : image.includes("module-emblems.png");
+        }),
+        positions: sprite.map((emblem) => getComputedStyle(emblem).backgroundPosition),
+      };
+    });
+    expect(emblemState.allUseExpectedArt).toBe(true);
     expect(new Set(emblemState.positions).size).toBe(9);
 
     expect((await request.put("/api/settings", { data: { appearance: "neo", theme: "dark" } })).ok()).toBeTruthy();
@@ -255,6 +261,7 @@ test("keeps every module's primary business entry and safe-exit control availabl
     ["/consulting", "添加客户"],
     ["/fitness", "新建训练模板"],
     ["/diet", "记录餐食"],
+    ["/reading", "添加书籍"],
     ["/entertainment", "添加游戏或活动"],
     ["/settings", "立即备份"],
   ] as const;
@@ -510,11 +517,42 @@ test("renders distinct records in every specialized module", async ({ page, requ
   const meal = await create(request, "meals", { meal_date: "2026-08-02", meal_type: "dinner", name: "验收晚餐", entry_kind: "actual" });
   await create(request, "mealItems", { meal_id: meal.id, food_name: "验收食物", quantity: 1, calories: 420, protein: 31 });
   await create(request, "entertainmentItems", { name: "验收游戏", platform: "Steam", status: "playing", next_goal: "完成第一章" });
+  const book = await create(request, "books", { title: "验收书籍", author: "验收作者", status: "reading", total_pages: 300, current_page: 60 });
+  await create(request, "readingNotes", { book_id: book.id, note_date: "2026-08-02", content: "验收阅读笔记", quote: "验收摘录" });
 
-  for (const [path, text] of [["/development", "验收 Bug"], ["/consulting", "验收交付物"], ["/fitness", "验收深蹲"], ["/diet", "验收晚餐"], ["/entertainment", "验收游戏"]]) {
+  for (const [path, text] of [["/development", "验收 Bug"], ["/consulting", "验收交付物"], ["/fitness", "验收深蹲"], ["/diet", "验收晚餐"], ["/reading", "验收书籍"], ["/entertainment", "验收游戏"]]) {
     await page.goto(path);
     await expect(page.getByText(text, { exact: false }).first()).toBeVisible();
   }
+});
+
+test("adds a book, records reading progress and keeps a note", async ({ page }) => {
+  await page.goto("/reading");
+  await page.getByRole("button", { name: "添加书籍" }).click();
+  const bookDialog = page.getByRole("dialog");
+  await bookDialog.getByLabel(/书名/).fill("浏览器验收阅读");
+  await bookDialog.getByLabel(/^作者/).fill("验收作者");
+  await bookDialog.getByLabel(/状态/).selectOption("reading");
+  await bookDialog.getByLabel(/总页数/).fill("200");
+  await bookDialog.getByLabel(/当前页/).fill("20");
+  await bookDialog.getByRole("button", { name: "保存", exact: true }).click();
+
+  const card = page.locator(".book-card").filter({ hasText: "浏览器验收阅读" });
+  await expect(card).toBeVisible();
+  await card.getByRole("button", { name: "记录阅读" }).click();
+  const sessionDialog = page.getByRole("dialog");
+  await sessionDialog.getByLabel(/阅读时长/).fill("25");
+  await sessionDialog.getByLabel(/阅读页数/).fill("30");
+  await sessionDialog.getByRole("button", { name: "保存", exact: true }).click();
+  await expect(card).toContainText("50 / 200 页");
+
+  await card.getByRole("button", { name: "写笔记" }).click();
+  const noteDialog = page.getByRole("dialog");
+  await noteDialog.getByLabel(/原文摘录/).fill("验收摘录句子");
+  await noteDialog.getByLabel(/我的想法/).fill("验收笔记内容");
+  await noteDialog.getByRole("button", { name: "保存", exact: true }).click();
+  await expect(page.getByText("验收笔记内容")).toBeVisible();
+  await expect(card).toContainText("1 条笔记");
 });
 
 test("restores trash, persists appearance and theme, creates backup and downloads export", async ({ page, request }) => {

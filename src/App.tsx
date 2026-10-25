@@ -10,6 +10,7 @@ const DevelopmentPage = lazy(() => import("./pages/DevelopmentPage").then((modul
 const ConsultingPage = lazy(() => import("./pages/ConsultingPage").then((module) => ({ default: module.ConsultingPage })));
 const FitnessPage = lazy(() => import("./pages/FitnessPage").then((module) => ({ default: module.FitnessPage })));
 const DietPage = lazy(() => import("./pages/DietPage").then((module) => ({ default: module.DietPage })));
+const ReadingPage = lazy(() => import("./pages/ReadingPage").then((module) => ({ default: module.ReadingPage })));
 const EntertainmentPage = lazy(() => import("./pages/EntertainmentPage").then((module) => ({ default: module.EntertainmentPage })));
 const SettingsPage = lazy(() => import("./pages/SettingsPage").then((module) => ({ default: module.SettingsPage })));
 
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
       { path: "consulting", element: <LazyPage><ConsultingPage /></LazyPage> },
       { path: "fitness", element: <LazyPage><FitnessPage /></LazyPage> },
       { path: "diet", element: <LazyPage><DietPage /></LazyPage> },
+      { path: "reading", element: <LazyPage><ReadingPage /></LazyPage> },
       { path: "entertainment", element: <LazyPage><EntertainmentPage /></LazyPage> },
       { path: "settings", element: <LazyPage><SettingsPage /></LazyPage> },
     ],

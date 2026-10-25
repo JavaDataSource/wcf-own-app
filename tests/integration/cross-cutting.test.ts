@@ -16,7 +16,7 @@ async function create(collection: string, payload: Record<string, any>) {
 }
 
 describe("search, trash and settings", () => {
-  it("searches core records across all seven business areas and groups by module", async () => {
+  it("searches core records across all eight business areas and groups by module", async () => {
     const client = await create("clients", { name: "晨星咨询客户" });
     await create("planItems", { title: "晨星今日计划", plan_date: "2026-08-02" });
     await create("mediaContents", { title: "晨星内容", stage: "idea" });
@@ -25,10 +25,11 @@ describe("search, trash and settings", () => {
     await create("workoutTemplates", { name: "晨星训练" });
     await create("foods", { name: "晨星早餐" });
     await create("entertainmentItems", { name: "晨星游戏" });
+    await create("books", { title: "晨星阅读", author: "本地作者" });
     const response = await app.inject({ method: "GET", url: "/api/search?q=%E6%99%A8%E6%98%9F" });
     expect(response.statusCode).toBe(200);
     const modules = new Set(response.json().data.map((item: any) => item.module));
-    expect(modules).toEqual(new Set(["today", "media", "development", "consulting", "fitness", "diet", "entertainment"]));
+    expect(modules).toEqual(new Set(["today", "media", "development", "consulting", "fitness", "diet", "entertainment", "reading"]));
   });
 
   it("moves a record to trash, restores it, and requires a separate permanent-delete operation", async () => {

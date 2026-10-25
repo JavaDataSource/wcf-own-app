@@ -22,6 +22,7 @@ test("production HTML contains the local app entry point and no remote runtime a
     const file = `${module}-v1.webp`;
     assert.equal(fs.existsSync(new URL(`../dist/assets/module-icons/${file}`, import.meta.url)), true, `${file} should be bundled locally`);
   }
+  assert.equal(fs.existsSync(new URL("../dist/assets/module-icons/reading-v1.svg", import.meta.url)), true, "reading-v1.svg should be bundled locally");
   for (const file of ["muzi-app-icon-v1.webp", "muzi-app-icon-v1.png", "favicon-64-v1.png"]) {
     assert.equal(fs.existsSync(new URL(`../dist/assets/brand/${file}`, import.meta.url)), true, `${file} should be bundled locally`);
   }

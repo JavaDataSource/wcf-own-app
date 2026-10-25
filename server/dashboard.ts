@@ -49,6 +49,7 @@ export function buildDashboard(store: AppStore, date: string): Record<string, an
   const workouts = store.list("workouts");
   const meals = store.list("meals");
   const entertainment = store.list("entertainmentItems");
+  const books = store.list("books");
 
   return {
     date,
@@ -68,6 +69,7 @@ export function buildDashboard(store: AppStore, date: string): Record<string, an
       fitness: workouts.filter((item) => item.workout_date >= date).slice(0, 3),
       diet: meals.filter((item) => item.meal_date === date).slice(0, 4),
       entertainment: entertainment.filter((item) => item.status === "playing").slice(0, 3),
+      reading: books.filter((item) => item.status === "reading").slice(0, 3),
     },
   };
 }

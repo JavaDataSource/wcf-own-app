@@ -199,6 +199,30 @@ export const collectionDefinitions = {
     fields: ["entertainment_id", "started_at", "ended_at", "duration_minutes", "progress_note"],
     search: ["progress_note"],
   },
+  books: {
+    table: "books",
+    title: "title",
+    module: "reading",
+    required: ["title"],
+    fields: ["title", "author", "category", "status", "total_pages", "current_page", "started_on", "finished_on", "rating", "summary"],
+    search: ["title", "author", "category", "summary"],
+  },
+  readingSessions: {
+    table: "reading_sessions",
+    title: "session_date",
+    module: "reading",
+    required: ["book_id", "session_date"],
+    fields: ["book_id", "session_date", "minutes", "pages_read", "note"],
+    search: ["note"],
+  },
+  readingNotes: {
+    table: "reading_notes",
+    title: "content",
+    module: "reading",
+    required: ["book_id", "note_date", "content"],
+    fields: ["book_id", "note_date", "chapter", "page_number", "quote", "content"],
+    search: ["content", "quote", "chapter"],
+  },
 } as const;
 
 export type CollectionName = keyof typeof collectionDefinitions;
@@ -215,4 +239,5 @@ export const sourceCollectionByType: Record<string, CollectionName> = {
   workout: "workouts",
   meal: "meals",
   entertainment_item: "entertainmentItems",
+  book: "books",
 };

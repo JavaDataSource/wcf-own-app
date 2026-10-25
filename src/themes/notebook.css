@@ -483,6 +483,11 @@
 :root[data-appearance="notebook"] .app-shell[data-module="fitness"] .page-header-sticker       { background-position: 100% 50%; }
 :root[data-appearance="notebook"] .app-shell[data-module="diet"] .page-header-sticker          { background-position: 0 100%; }
 :root[data-appearance="notebook"] .app-shell[data-module="entertainment"] .page-header-sticker { background-position: 50% 100%; }
+:root[data-appearance="notebook"] .app-shell[data-module="reading"] .page-header-sticker {
+  background-image: url("/assets/module-icons/reading-v1.svg");
+  background-size: cover;
+  background-position: center;
+}
 :root[data-appearance="notebook"] .app-shell[data-module="settings"] .page-header-sticker      { background-position: 100% 100%; }
 
 :root[data-appearance="notebook"] .page-header h1 {
@@ -916,6 +921,21 @@
 :root[data-appearance="notebook"] .game-cover { background: var(--notion-blue-bg); color: var(--notion-blue); }
 :root[data-appearance="notebook"] .game-cover .badge { background: var(--bg); border: 0; color: var(--notion-blue); }
 
+:root[data-appearance="notebook"] .book-card {
+  border-color: var(--border);
+  border-radius: 5px;
+  background: var(--bg);
+  box-shadow: none;
+  transform: none;
+}
+
+:root[data-appearance="notebook"] .book-card:hover { border-color: var(--border-strong); box-shadow: none; transform: translateY(-1px); }
+:root[data-appearance="notebook"] .book-cover { background: var(--notion-purple-bg); color: var(--notion-purple); }
+:root[data-appearance="notebook"] .book-cover .badge { background: var(--bg); border: 0; color: var(--notion-purple); }
+:root[data-appearance="notebook"] .reading-stat { border-color: var(--border); border-radius: 5px; background: var(--bg); box-shadow: none; }
+:root[data-appearance="notebook"] .reading-note-list article { border-color: var(--border); border-radius: 5px; background: var(--bg); }
+:root[data-appearance="notebook"] .reading-note-list blockquote { border-left-color: var(--notion-purple); }
+
 :root[data-appearance="notebook"] .data-file-panel {
   border: 1px solid var(--border);
   border-radius: 5px;
@@ -1068,7 +1088,8 @@
   :root[data-appearance="notebook"] .page-actions { grid-column: 1 / -1; grid-row: 2; width: 100%; }
   :root[data-appearance="notebook"] .overview-strip { align-items: flex-start; flex-wrap: wrap; gap: 10px 18px; }
   :root[data-appearance="notebook"] .overview-strip .progress-track { flex-basis: 100%; }
-  :root[data-appearance="notebook"] :is(.dashboard-grid, .summary-grid, .settings-grid, .consult-grid, .fitness-grid, .meal-columns, .game-grid, .media-analytics-grid, .workspace-split, .consult-layout) { grid-template-columns: 1fr; }
+  :root[data-appearance="notebook"] :is(.dashboard-grid, .summary-grid, .settings-grid, .consult-grid, .fitness-grid, .meal-columns, .game-grid, .book-grid, .reading-grid, .media-analytics-grid, .workspace-split, .consult-layout) { grid-template-columns: 1fr; }
+  :root[data-appearance="notebook"] .reading-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   :root[data-appearance="notebook"] .summary-tile,
   :root[data-appearance="notebook"] .summary-tile:nth-child(even) { grid-column: auto; }
   :root[data-appearance="notebook"] :is(.project-rail, .client-column) { position: relative; top: auto; }
@@ -1078,7 +1099,7 @@
   :root[data-appearance="notebook"] .preferences > label { align-items: flex-start; flex-direction: column; padding: 12px 0; }
   :root[data-appearance="notebook"] :is(.appearance-toggle, .theme-toggle) { width: 100%; }
   :root[data-appearance="notebook"] :is(.appearance-toggle, .theme-toggle) button { flex: 1; justify-content: center; }
-  :root[data-appearance="notebook"] :is(.session-list article, .backup-list article, .trash-list article) { grid-template-columns: 1fr; padding: 12px 0; }
+  :root[data-appearance="notebook"] :is(.session-list article, .reading-session-list article, .backup-list article, .trash-list article) { grid-template-columns: 1fr; padding: 12px 0; }
   :root[data-appearance="notebook"] .modal-backdrop { padding: 14px; }
   :root[data-appearance="notebook"] .modal { max-height: calc(100dvh - 28px); }
 }

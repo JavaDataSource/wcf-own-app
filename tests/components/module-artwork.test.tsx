@@ -5,9 +5,10 @@ import { ModuleArtwork, moduleArtworkSources } from "../../src/components/Module
 describe("AI-generated module artwork", () => {
   it("provides one unique local asset for every application module", () => {
     const sources = Object.values(moduleArtworkSources);
-    expect(sources).toHaveLength(9);
-    expect(new Set(sources).size).toBe(9);
-    for (const source of sources) expect(source).toMatch(/^\/assets\/module-icons\/.+-v1\.webp$/);
+    expect(sources).toHaveLength(10);
+    expect(new Set(sources).size).toBe(10);
+    for (const source of sources) expect(source).toMatch(/^\/assets\/module-icons\/.+-v1\.(webp|svg)$/);
+    expect(moduleArtworkSources.reading).toBe("/assets/module-icons/reading-v1.svg");
   });
 
   it("is decorative beside visible text and can carry an accessible label when used alone", () => {
