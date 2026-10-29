@@ -1,14 +1,14 @@
 # 第一版验收覆盖
 
-本表把 `PRD.md` 中 AC-001 至 AC-040 映射到可重复执行的检查。自动化总入口为 `npm run test:all`。涉及“重启电脑”的标准通过完全关闭进程后从同一独立 SQLite 文件重新读取来做等价自动化；这是应用能控制的持久化边界，真实电脑重启不引入额外内存状态。
+本表把 `PRD.md` 中 AC-001 至 AC-041 映射到可重复执行的检查。自动化总入口为 `npm run test:all`。涉及“重启电脑”的标准通过完全关闭进程后从同一独立 SQLite 文件重新读取来做等价自动化；这是应用能控制的持久化边界，真实电脑重启不引入额外内存状态。
 
 | 标准 | 覆盖方式 |
 | --- | --- |
 | AC-001 | `production-server.test.mjs` 验证生产启动与首页/API；启动器测试验证无需登录的本机启动 |
 | AC-002 | `rendered-html.test.mjs` 检查无远程运行资源；E2E 监听并拒绝任何外部请求 |
 | AC-003 | `config.test.ts`、`health.test.ts` 验证仅绑定 `127.0.0.1`，并拒绝外部 Origin 写入 |
-| AC-004 | E2E 逐一进入九页；`app-shell.test.tsx` 检查完整分组导航 |
-| AC-005 | `work-modules.test.ts`、`life-modules.test.ts` 和 E2E 写入并重新读取七个业务领域与计划 |
+| AC-004 | E2E 逐一进入十页；`app-shell.test.tsx` 检查完整分组导航 |
+| AC-005 | `work-modules.test.ts`、`life-modules.test.ts`、`reading.test.ts` 和 E2E 写入并重新读取七个业务模块与计划 |
 | AC-006 | SQLite 数据不依赖浏览器；E2E 页面重载与 `persistence.test.ts` 重新读取 |
 | AC-007 | `persistence.test.ts` 完全关闭并重新创建服务后读取同一记录 |
 | AC-008 | 与 AC-007 同一文件级持久化路径；启动器进程退出测试确保无进程内状态依赖 |
@@ -30,7 +30,7 @@
 | AC-027 | `cross-cutting.test.ts` 与 E2E 覆盖软删除、回收站和恢复 |
 | AC-028 | `ui.test.tsx` 验证取消确认不会调用永久删除；设置页只在确认回调调用永久删除接口 |
 | AC-029 | `cross-cutting.test.ts` 重启后读取设置；E2E 验证主题和首页摘要设置刷新后仍生效 |
-| AC-030 | E2E 从空库进入九页；`ui.test.tsx` 验证通用空、加载和错误状态 |
+| AC-030 | E2E 从空库进入十页；`ui.test.tsx` 验证通用空、加载和错误状态 |
 | AC-031 | `backup-slice.test.ts` 检查独立备份文件；E2E 检查手动备份列表 |
 | AC-032 | `backup-export.test.ts` 验证名称和长期保留刷新后仍在；E2E 修改备份名 |
 | AC-033 | `backup-export.test.ts` 连续调用每日备份并验证同日仅一份 |
@@ -40,5 +40,6 @@
 | AC-038 | `backup-export.test.ts` 制造备份写入失败；`app-shell.test.tsx` 验证界面错误提示 |
 | AC-039 | `backup-export.test.ts` 解压验证 manifest、全量 JSON、各集合 CSV；E2E 验证下载 |
 | AC-040 | `persistence.test.ts` 验证 WAL 检查点、数据库完整性与重启持久化；`app-shell.test.tsx` 验证入口和成功状态；E2E 验证手动保存未到延时的快速备忘 |
+| AC-041 | `reading.test.ts` 覆盖书籍状态、阅读会话、自动推进当前页与读完状态、读书笔记和统计；E2E 验证阅读页新增、筛选和统计展示 |
 
 最终回归时还会执行 ESLint、两套 TypeScript 检查、Vite/服务端生产构建、生产静态资源检查、真实生产进程和桌面启动器测试。

@@ -250,7 +250,7 @@ test("keeps Neo isolated, multicolor and overflow-free across all pages and targ
 });
 
 test("keeps every module's primary business entry and safe-exit control available in all three appearances", async ({ page, request }) => {
-  // 该用例要真实访问 3 套外观下的 9 个页面；云端共享 runner 比本机慢，
+  // 该用例要真实访问 3 套外观下的 10 个页面；云端共享 runner 比本机慢，
   // 保留全部 27 次导航与断言，并为完整验收留出与 Neo 全视口用例相同的时间。
   test.setTimeout(120_000);
   const routes = [
