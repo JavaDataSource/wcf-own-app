@@ -8,7 +8,7 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 3000,
     proxy: {
-      "/api": `http://127.0.0.1:${process.env.MUZI_PORT ?? "4317"}`,
+      "/api": `http://127.0.0.1:${process.env.SHIFENG_PORT ?? "4317"}`,
     },
   },
   build: {

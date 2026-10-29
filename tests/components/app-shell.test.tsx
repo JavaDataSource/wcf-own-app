@@ -42,7 +42,7 @@ describe("application shell", () => {
     }
     expect(screen.getByRole("button", { name: /搜索所有内容/ })).toBeInTheDocument();
     expect(screen.getByText("仅保存在这台电脑")).toBeInTheDocument();
-    expect(container.querySelector(".brand-mark img")).toHaveAttribute("src", "/assets/brand/muzi-mark.svg");
+    expect(container.querySelector(".brand-mark img")).toHaveAttribute("src", "/assets/brand/shifeng-mark.svg");
     expect(container.querySelector(".brand-mark")).toHaveTextContent("");
   });
 
@@ -86,7 +86,7 @@ describe("application shell", () => {
     await waitFor(() => expect(document.documentElement.dataset.appearance).toBe("neo"));
     expect(container.querySelector(".app-shell")).toHaveClass("neo-shell");
     expect(document.querySelector(".ambient-environment")).not.toBeInTheDocument();
-    expect(container.querySelector(".brand-mark img")).toHaveAttribute("src", "/assets/neo/muzi-app-icon-brand.png");
+    expect(container.querySelector(".brand-mark img")).toHaveAttribute("src", "/assets/neo/shifeng-app-icon-brand.png");
     expect(container.querySelectorAll(".neo-nav-emblem")).toHaveLength(10);
   });
 
@@ -113,7 +113,7 @@ describe("application shell", () => {
     const fetchMock = mockApi();
     renderApp();
     await userEvent.click(await screen.findByRole("button", { name: "保存并退出" }));
-    expect(await screen.findByText("数据已保存，木子工作台已安全退出")).toBeInTheDocument();
+    expect(await screen.findByText("数据已保存，拾峰工作台已安全退出")).toBeInTheDocument();
     const calls = fetchMock.mock.calls.map(([input]) => String(input));
     expect(calls).toContain("/api/system/save");
     expect(calls).toContain("/api/system/save-and-exit");

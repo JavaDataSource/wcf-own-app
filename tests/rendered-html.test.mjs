@@ -9,9 +9,9 @@ test("production HTML contains the local app entry point and no remote runtime a
     .filter((file) => file.endsWith(".css"))
     .map((file) => fs.readFileSync(new URL(file, assetsDirectory), "utf8"))
     .join("\n");
-  assert.match(html, /<title>木子工作台<\/title>/);
+  assert.match(html, /<title>拾峰工作台<\/title>/);
   assert.match(html, /<div id="root"><\/div>/);
-  assert.match(html, /\/assets\/neo\/muzi-app-icon-favicon\.png/);
+  assert.match(html, /\/assets\/neo\/shifeng-app-icon-favicon\.png/);
   assert.doesNotMatch(html, /https?:\/\/(fonts|cdn|unpkg|jsdelivr)\./i);
   assert.match(html, /\/assets\//);
   for (const file of ["chromatic-polymer-light-v1.webp", "chromatic-polymer-dark-v1.webp"]) {
@@ -23,13 +23,13 @@ test("production HTML contains the local app entry point and no remote runtime a
     assert.equal(fs.existsSync(new URL(`../dist/assets/module-icons/${file}`, import.meta.url)), true, `${file} should be bundled locally`);
   }
   assert.equal(fs.existsSync(new URL("../dist/assets/module-icons/reading-v1.svg", import.meta.url)), true, "reading-v1.svg should be bundled locally");
-  for (const file of ["muzi-app-icon-v1.webp", "muzi-app-icon-v1.png", "favicon-64-v1.png"]) {
+  for (const file of ["shifeng-app-icon-v1.webp", "shifeng-app-icon-v1.png", "favicon-64-v1.png"]) {
     assert.equal(fs.existsSync(new URL(`../dist/assets/brand/${file}`, import.meta.url)), true, `${file} should be bundled locally`);
   }
-  for (const file of ["brand/muzi-mark.svg", "notebook/module-stickers.png"]) {
+  for (const file of ["brand/shifeng-mark.svg", "notebook/module-stickers.png"]) {
     assert.equal(fs.existsSync(new URL(`../dist/assets/${file}`, import.meta.url)), true, `${file} should be bundled locally`);
   }
-  for (const file of ["module-emblems.png", "muzi-app-icon-v1.png", "muzi-app-icon-brand.png", "muzi-app-icon-favicon.png"]) {
+  for (const file of ["module-emblems.png", "shifeng-app-icon-v1.png", "shifeng-app-icon-brand.png", "shifeng-app-icon-favicon.png"]) {
     assert.equal(fs.existsSync(new URL(`../dist/assets/neo/${file}`, import.meta.url)), true, `${file} should be bundled locally`);
   }
   assert.match(css, /:root\[data-appearance=neo\]/);

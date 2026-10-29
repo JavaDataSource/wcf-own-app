@@ -3,16 +3,16 @@ import { openPathCommand } from "../../server/platform.js";
 
 describe("桌面系统命令", () => {
   it("在 macOS 使用 open", () => {
-    expect(openPathCommand("/Users/muzi/Documents", "darwin")).toEqual({
+    expect(openPathCommand("/Users/shifeng/Documents", "darwin")).toEqual({
       command: "open",
-      args: ["/Users/muzi/Documents"],
+      args: ["/Users/shifeng/Documents"],
     });
   });
 
   it("在 Windows 使用 explorer.exe 并保留带空格路径", () => {
-    expect(openPathCommand("C:\\Users\\Muzi User\\AppData\\Local\\MuziWorkspace", "win32")).toEqual({
+    expect(openPathCommand("C:\\Users\\Shifeng User\\AppData\\Local\\ShifengWorkspace", "win32")).toEqual({
       command: "explorer.exe",
-      args: ["C:\\Users\\Muzi User\\AppData\\Local\\MuziWorkspace"],
+      args: ["C:\\Users\\Shifeng User\\AppData\\Local\\ShifengWorkspace"],
     });
   });
 });

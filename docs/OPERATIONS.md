@@ -2,7 +2,7 @@
 
 ## 1. 启动和退出
 
-macOS 双击根目录的 `启动木子工作台.command`，Windows 双击 `启动木子工作台.bat`。应用只监听 `127.0.0.1:4317`，同一局域网里的其他设备无法直接访问。重复启动不会创建第二个服务，而是检测健康状态并打开现有地址。
+macOS 双击根目录的 `启动拾峰工作台.command`，Windows 双击 `启动拾峰工作台.bat`。应用只监听 `127.0.0.1:4317`，同一局域网里的其他设备无法直接访问。重复启动不会创建第二个服务，而是检测健康状态并打开现有地址。
 
 退出时点击页面顶部的“保存并退出”。页面会先提交仍在编辑中的自动保存内容，再执行 SQLite WAL 检查点和完整性检查；响应成功后，本地 HTTP 服务和数据库连接会安全关闭。直接关闭浏览器标签页只会关闭界面，服务继续留在后台，下一次启动会复用它。电脑关机时系统会结束服务，已经提交到 SQLite 的数据不会丢失。
 
@@ -16,16 +16,16 @@ npm run app:start
 
 ## 2. 文件位置
 
-macOS 默认根目录为 `~/Library/Application Support/MuziWorkspace`，Windows 默认为 `%LOCALAPPDATA%\MuziWorkspace`：
+macOS 默认根目录为 `~/Library/Application Support/ShifengWorkspace`，Windows 默认为 `%LOCALAPPDATA%\ShifengWorkspace`：
 
 - `data/app.sqlite`：唯一主数据库。
 - `backups/*.sqlite`：完整、独立、可复制的备份。
 - `backups/index.json`：备份名称、类型和长期保留标记。
 - `exports/*.zip`：包含全部 JSON 和逐集合 CSV 的导出包。
 - `logs/app.log`：启动和运行日志。
-- `muzi-workspace.pid`：由桌面启动器管理的进程记录。
+- `shifeng-workspace.pid`：由桌面启动器管理的进程记录。
 
-可以设置 `MUZI_DATA_DIR` 使用另一个绝对目录；不要在应用运行时手动移动或改写主数据库及其 `-wal`、`-shm` 文件。
+可以设置 `SHIFENG_DATA_DIR` 使用另一个绝对目录；不要在应用运行时手动移动或改写主数据库及其 `-wal`、`-shm` 文件。
 
 ## 3. 备份规则
 
@@ -55,7 +55,7 @@ macOS 默认根目录为 `~/Library/Application Support/MuziWorkspace`，Windows
 
 ### 页面打不开
 
-先运行 `npm run app:start`，查看终端信息。若失败，macOS 检查 `~/Library/Application Support/MuziWorkspace/logs/app.log`，Windows 检查 `%LOCALAPPDATA%\MuziWorkspace\logs\app.log`。默认端口是 4317；开发页面端口是 3000。
+先运行 `npm run app:start`，查看终端信息。若失败，macOS 检查 `~/Library/Application Support/ShifengWorkspace/logs/app.log`，Windows 检查 `%LOCALAPPDATA%\ShifengWorkspace\logs\app.log`。默认端口是 4317；开发页面端口是 3000。
 
 如果系统提示找不到 `node` 或 `npm`，请安装 Node.js 22.13.0 或更高版本并重新打开终端。第一次从源代码运行还需要在项目目录执行一次 `npm install`。
 
@@ -69,4 +69,4 @@ macOS 默认根目录为 `~/Library/Application Support/MuziWorkspace`，Windows
 
 ### 手动迁移到同一台电脑的其他目录
 
-先在页面中点击“保存并退出”，复制整个 `MuziWorkspace` 目录，再通过 `MUZI_DATA_DIR` 指向新目录启动。确认正常后再决定是否保留旧目录。
+先在页面中点击“保存并退出”，复制整个 `ShifengWorkspace` 目录，再通过 `SHIFENG_DATA_DIR` 指向新目录启动。确认正常后再决定是否保留旧目录。

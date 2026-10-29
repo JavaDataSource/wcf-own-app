@@ -1,5 +1,5 @@
 /* ===========================================================================
-   木子工作台 — NEO / 01
+   拾峰工作台 — NEO / 01
    Editorial neo-brutalism skin. This file intentionally sits after the
    classic stylesheet so the data and interaction layer remain untouched.
    ========================================================================== */
@@ -1031,6 +1031,11 @@
 .neo-shell .reading-stat:nth-child(2) { background: color-mix(in srgb, var(--mix-b) 15%, var(--neo-sheet)); }
 .neo-shell .reading-stat:nth-child(3) { background: color-mix(in srgb, var(--mix-c) 15%, var(--neo-sheet)); }
 .neo-shell .reading-stat:nth-child(4) { background: color-mix(in srgb, var(--mix-d) 15%, var(--neo-sheet)); }
+.neo-shell[data-module="reading"] .empty-mark {
+  background-image: url("/assets/module-icons/reading-v1.svg");
+  background-size: 84% 84%;
+  background-position: center;
+}
 .neo-shell .book-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 18px; }
 .neo-shell .book-card { grid-column: span 6; border: var(--neo-line-heavy); border-radius: 2px; background: var(--neo-sheet); box-shadow: 4px 4px 0 var(--neo-shadow); }
 .neo-shell .book-card:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--neo-shadow); }

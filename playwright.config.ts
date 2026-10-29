@@ -24,8 +24,8 @@ export default defineConfig({
     timeout: 120_000,
     env: {
       NODE_ENV: "test",
-      MUZI_DATA_DIR: path.resolve(".test-data/e2e"),
-      MUZI_PORT: "4327",
+      SHIFENG_DATA_DIR: path.resolve(".test-data/e2e"),
+      SHIFENG_PORT: "4327",
     },
   },
 });

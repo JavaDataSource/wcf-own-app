@@ -137,12 +137,12 @@ test("uses a distinct local AI-generated icon for every module in one consistent
   await page.goto("/");
   const brandIcon = page.locator(".brand-mark img");
   await expect(brandIcon).toBeVisible();
-  await expect(page.locator(".brand-mark")).not.toContainText("木");
+  await expect(page.locator(".brand-mark")).not.toContainText("拾");
   const brandState = await brandIcon.evaluate((icon) => ({
     source: (icon as HTMLImageElement).getAttribute("src"),
     loaded: (icon as HTMLImageElement).complete && (icon as HTMLImageElement).naturalWidth >= 64,
   }));
-  expect(brandState.source).toBe("/assets/brand/muzi-mark.svg");
+  expect(brandState.source).toBe("/assets/brand/shifeng-mark.svg");
   expect(brandState.loaded).toBeTruthy();
   await expect(page.locator(".page-header-icon .module-artwork")).toBeVisible();
   await expect(page.locator(".toolbar-page-icon .module-artwork")).toBeVisible();
@@ -482,27 +482,33 @@ test("deletes a consulting client through a confirmed trash action", async ({ pa
 });
 
 test("shows workout and meal details in monthly calendars", async ({ page, request }) => {
+  const today = new Date();
+  const dateValue = (value: Date) => `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}`;
+  const calendarDate = dateValue(today);
+  const nextDateValue = new Date(today);
+  nextDateValue.setDate(nextDateValue.getDate() + 1);
+  const nextCalendarDate = dateValue(nextDateValue);
   const template = await create(request, "workoutTemplates", { name: "日历力量训练", body_part: "上肢", weekday: 7 });
-  const workout = await create(request, "workouts", { template_id: template.id, name: "周日训练", body_part: "上肢", workout_date: "2026-08-02", status: "completed" });
+  const workout = await create(request, "workouts", { template_id: template.id, name: "周日训练", body_part: "上肢", workout_date: calendarDate, status: "completed" });
   const exercise = await create(request, "workoutExercises", { workout_id: workout.id, name: "卧推", sort_order: 0 });
   await create(request, "workoutSets", { workout_exercise_id: exercise.id, set_number: 1, reps: 8, weight: 50, completed: 1 });
   await create(request, "workoutSets", { workout_exercise_id: exercise.id, set_number: 2, reps: 8, weight: 50, completed: 1 });
-  const meal = await create(request, "meals", { meal_date: "2026-08-02", meal_type: "dinner", name: "日历验收晚餐", entry_kind: "actual" });
+  const meal = await create(request, "meals", { meal_date: calendarDate, meal_type: "dinner", name: "日历验收晚餐", entry_kind: "actual" });
   await create(request, "mealItems", { meal_id: meal.id, food_name: "鸡肉饭", quantity: 1, calories: 420, protein: 32 });
 
   await page.goto("/fitness");
-  const workoutDay = page.locator('.month-calendar-day[data-date="2026-08-02"]');
+  const workoutDay = page.locator(`.month-calendar-day[data-date="${calendarDate}"]`);
   await expect(page.getByRole("heading", { name: "训练日历" })).toBeVisible();
   await expect(workoutDay).toContainText("上肢");
   await expect(workoutDay).toContainText("卧推 16次");
 
   await page.goto("/diet");
-  const mealDay = page.locator('.month-calendar-day[data-date="2026-08-02"]');
+  const mealDay = page.locator(`.month-calendar-day[data-date="${calendarDate}"]`);
   await expect(page.getByRole("heading", { name: "饮食日历" })).toBeVisible();
   await expect(mealDay).toContainText("实际 · 晚餐");
   await expect(mealDay).toContainText("日历验收晚餐 · 420 kcal");
-  await page.locator('.month-calendar-day[data-date="2026-08-03"]').click();
-  await expect(page.locator('.diet-toolbar input[type="date"]')).toHaveValue("2026-08-03");
+  await page.locator(`.month-calendar-day[data-date="${nextCalendarDate}"]`).click();
+  await expect(page.locator('.diet-toolbar input[type="date"]')).toHaveValue(nextCalendarDate);
 });
 
 test("renders distinct records in every specialized module", async ({ page, request }) => {
@@ -601,5 +607,5 @@ test("restores trash, persists appearance and theme, creates backup and download
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "导出 ZIP" }).click();
   const download = await downloadPromise;
-  expect(download.suggestedFilename()).toMatch(/muzi-export-.*\.zip/);
+  expect(download.suggestedFilename()).toMatch(/shifeng-export-.*\.zip/);
 });

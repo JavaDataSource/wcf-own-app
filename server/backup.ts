@@ -129,7 +129,7 @@ export class BackupManager {
     const state = this.store.state();
     const manifest = {
       exportedAt: new Date().toISOString(),
-      app: "MuziWorkspace",
+      app: "ShifengWorkspace",
       schemaVersion: this.currentSchemaVersion(),
       formatVersion: 1,
     };
@@ -140,7 +140,7 @@ export class BackupManager {
       folder.file(`${name}.csv`, toCsv(this.store.list(name, true)));
     }
     const buffer = await zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" });
-    const filename = `muzi-export-${safeTimestamp()}.zip`;
+    const filename = `shifeng-export-${safeTimestamp()}.zip`;
     const output = path.join(this.paths.exportsDir, filename);
     fs.writeFileSync(output, buffer);
     return { filename, path: output, size: buffer.byteLength };

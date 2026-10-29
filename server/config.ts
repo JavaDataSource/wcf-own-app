@@ -14,7 +14,7 @@ export type AppPaths = {
 export function getAppPaths(override?: string): AppPaths {
   const root = path.resolve(
     override ??
-      process.env.MUZI_DATA_DIR ??
+      process.env.SHIFENG_DATA_DIR ??
       defaultDataRoot(),
   );
   const paths: AppPaths = {
@@ -37,14 +37,14 @@ export function getAppPaths(override?: string): AppPaths {
 }
 
 export const APP_HOST = "127.0.0.1";
-export const APP_PORT = Number(process.env.MUZI_PORT ?? 4317);
+export const APP_PORT = Number(process.env.SHIFENG_PORT ?? 4317);
 
 function defaultDataRoot(): string {
   if (process.platform === "win32") {
-    return path.join(process.env.LOCALAPPDATA ?? process.env.APPDATA ?? os.homedir(), "MuziWorkspace");
+    return path.join(process.env.LOCALAPPDATA ?? process.env.APPDATA ?? os.homedir(), "ShifengWorkspace");
   }
   if (process.platform === "darwin") {
-    return path.join(os.homedir(), "Library", "Application Support", "MuziWorkspace");
+    return path.join(os.homedir(), "Library", "Application Support", "ShifengWorkspace");
   }
-  return path.join(process.env.XDG_DATA_HOME ?? path.join(os.homedir(), ".local", "share"), "MuziWorkspace");
+  return path.join(process.env.XDG_DATA_HOME ?? path.join(os.homedir(), ".local", "share"), "ShifengWorkspace");
 }

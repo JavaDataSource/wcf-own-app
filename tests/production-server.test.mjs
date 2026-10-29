@@ -11,11 +11,11 @@ import { browserOpenCommandFor, defaultDataRootFor, npmCommandFor } from "../scr
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 test("production server serves the built app and API on loopback", async (context) => {
-  const dataRoot = fs.mkdtempSync(path.join(os.tmpdir(), "muzi-production-"));
+  const dataRoot = fs.mkdtempSync(path.join(os.tmpdir(), "shifeng-production-"));
   const port = await freePort();
   const child = spawn(process.execPath, [path.join(projectRoot, "scripts", "start-server.mjs")], {
     cwd: projectRoot,
-    env: { ...process.env, NODE_ENV: "production", MUZI_BUILD_ID: "production-test-build", MUZI_DATA_DIR: dataRoot, MUZI_PORT: String(port) },
+    env: { ...process.env, NODE_ENV: "production", SHIFENG_BUILD_ID: "production-test-build", SHIFENG_DATA_DIR: dataRoot, SHIFENG_PORT: String(port) },
     stdio: ["ignore", "pipe", "pipe"],
   });
   let output = "";
@@ -32,7 +32,7 @@ test("production server serves the built app and API on loopback", async (contex
   const health = await fetch(`${baseUrl}/api/health`).then((response) => response.json());
   assert.equal(health.data.status, "ok");
   assert.equal(health.data.database, "ok");
-  assert.equal(health.data.application, "muzi-workspace");
+  assert.equal(health.data.application, "shifeng-workspace");
   assert.equal(health.data.buildId, "production-test-build");
 
   const home = await fetch(baseUrl).then((response) => response.text());
@@ -52,19 +52,19 @@ test("production server serves the built app and API on loopback", async (contex
   assert.equal(missingAsset.status, 404);
   assert.doesNotMatch(await missingAsset.text(), /<html/i);
   const clientRoute = await fetch(`${baseUrl}/today`).then((response) => response.text());
-  assert.match(clientRoute, /<title>木子工作台<\/title>/);
+  assert.match(clientRoute, /<title>拾峰工作台<\/title>/);
 });
 
 test("desktop launcher reuses one server and the page exit endpoint saves before stopping it", async () => {
-  const dataRoot = fs.mkdtempSync(path.join(os.tmpdir(), "muzi-launcher-"));
+  const dataRoot = fs.mkdtempSync(path.join(os.tmpdir(), "shifeng-launcher-"));
   const port = await freePort();
-  const env = { ...process.env, MUZI_DATA_DIR: dataRoot, MUZI_PORT: String(port), MUZI_NO_OPEN: "1" };
+  const env = { ...process.env, SHIFENG_DATA_DIR: dataRoot, SHIFENG_PORT: String(port), SHIFENG_NO_OPEN: "1" };
   try {
     const started = spawnSync(process.execPath, [path.join(projectRoot, "scripts", "start-app.mjs")], { cwd: projectRoot, env, encoding: "utf8", timeout: 30_000 });
     assert.equal(started.status, 0, `${started.stdout}\n${started.stderr}`);
     const health = await fetch(`http://127.0.0.1:${port}/api/health`).then((response) => response.json());
     assert.equal(health.data.status, "ok");
-    const pidFile = path.join(dataRoot, "muzi-workspace.pid");
+    const pidFile = path.join(dataRoot, "shifeng-workspace.pid");
     const record = JSON.parse(fs.readFileSync(pidFile, "utf8"));
     assert.equal(Number.isSafeInteger(record.pid), true);
     assert.equal(record.projectRoot, projectRoot);
@@ -111,7 +111,7 @@ test("desktop launcher reuses one server and the page exit endpoint saves before
     await fetch(`http://127.0.0.1:${port}/api/system/save-and-exit`, { method: "POST" });
     await waitForStopped(`http://127.0.0.1:${port}`);
   } finally {
-    const pidFile = path.join(dataRoot, "muzi-workspace.pid");
+    const pidFile = path.join(dataRoot, "shifeng-workspace.pid");
     if (fs.existsSync(pidFile)) {
       try { process.kill(JSON.parse(fs.readFileSync(pidFile, "utf8")).pid, "SIGTERM"); } catch { /* Already stopped. */ }
     }
@@ -120,19 +120,19 @@ test("desktop launcher reuses one server and the page exit endpoint saves before
 });
 
 test("desktop launcher replaces a stale build before opening the page", async () => {
-  const dataRoot = fs.mkdtempSync(path.join(os.tmpdir(), "muzi-stale-launcher-"));
+  const dataRoot = fs.mkdtempSync(path.join(os.tmpdir(), "shifeng-stale-launcher-"));
   const port = await freePort();
   const baseUrl = `http://127.0.0.1:${port}`;
-  const pidFile = path.join(dataRoot, "muzi-workspace.pid");
-  const env = { ...process.env, MUZI_DATA_DIR: dataRoot, MUZI_PORT: String(port), MUZI_NO_OPEN: "1" };
+  const pidFile = path.join(dataRoot, "shifeng-workspace.pid");
+  const env = { ...process.env, SHIFENG_DATA_DIR: dataRoot, SHIFENG_PORT: String(port), SHIFENG_NO_OPEN: "1" };
   const staleInstanceId = "stale-instance";
   const stale = spawn(process.execPath, [path.join(projectRoot, "dist-server", "server", "index.js")], {
     cwd: projectRoot,
     env: {
       ...env,
       NODE_ENV: "production",
-      MUZI_BUILD_ID: "stale-build",
-      MUZI_INSTANCE_ID: staleInstanceId,
+      SHIFENG_BUILD_ID: "stale-build",
+      SHIFENG_INSTANCE_ID: staleInstanceId,
     },
     stdio: "ignore",
   });
@@ -159,7 +159,7 @@ test("desktop launcher replaces a stale build before opening the page", async ()
     const replacement = JSON.parse(fs.readFileSync(pidFile, "utf8"));
     assert.notEqual(replacement.pid, stale.pid);
     const health = await fetch(`${baseUrl}/api/health`).then((response) => response.json());
-    assert.equal(health.data.application, "muzi-workspace");
+    assert.equal(health.data.application, "shifeng-workspace");
     assert.notEqual(health.data.buildId, "stale-build");
     assert.equal(health.data.buildId, replacement.buildId);
 
@@ -181,15 +181,15 @@ test("desktop launcher replaces a stale build before opening the page", async ()
 });
 
 test("ships one user-facing launcher per desktop OS and no stop script", () => {
-  const macLauncher = path.join(projectRoot, "启动木子工作台.command");
-  const windowsLauncher = path.join(projectRoot, "启动木子工作台.bat");
+  const macLauncher = path.join(projectRoot, "启动拾峰工作台.command");
+  const windowsLauncher = path.join(projectRoot, "启动拾峰工作台.bat");
   assert.equal(fs.existsSync(macLauncher), true);
   assert.equal(fs.existsSync(windowsLauncher), true);
   assert.match(fs.readFileSync(macLauncher, "utf8"), /npm run app:start/);
   assert.match(fs.readFileSync(macLauncher, "utf8"), /cd -- "\$\{0:A:h\}"/);
   assert.match(fs.readFileSync(windowsLauncher, "utf8"), /call npm run app:start/);
   assert.match(fs.readFileSync(windowsLauncher, "utf8"), /cd \/d "%~dp0"/);
-  assert.equal(fs.existsSync(path.join(projectRoot, "停止木子工作台.command")), false);
+  assert.equal(fs.existsSync(path.join(projectRoot, "停止拾峰工作台.command")), false);
   assert.equal(fs.existsSync(path.join(projectRoot, "scripts", "stop-app.mjs")), false);
 });
 
@@ -198,12 +198,12 @@ test("desktop platform helpers preserve macOS and Windows paths and commands", (
   assert.equal(packageJson.scripts.start, "node scripts/start-server.mjs");
   assert.doesNotMatch(packageJson.scripts.start, /NODE_ENV=/);
   assert.equal(
-    defaultDataRootFor("darwin", {}, "/Users/muzi"),
-    "/Users/muzi/Library/Application Support/MuziWorkspace",
+    defaultDataRootFor("darwin", {}, "/Users/shifeng"),
+    "/Users/shifeng/Library/Application Support/ShifengWorkspace",
   );
   assert.equal(
-    defaultDataRootFor("win32", { LOCALAPPDATA: "C:\\Users\\Muzi User\\AppData\\Local" }, "C:\\Users\\Muzi User"),
-    "C:\\Users\\Muzi User\\AppData\\Local\\MuziWorkspace",
+    defaultDataRootFor("win32", { LOCALAPPDATA: "C:\\Users\\Shifeng User\\AppData\\Local" }, "C:\\Users\\Shifeng User"),
+    "C:\\Users\\Shifeng User\\AppData\\Local\\ShifengWorkspace",
   );
   assert.equal(npmCommandFor("darwin"), "npm");
   assert.equal(npmCommandFor("win32"), "npm.cmd");

@@ -7,12 +7,12 @@ import { fileURLToPath } from "node:url";
 import { browserOpenCommandFor, defaultDataRootFor, npmCommandFor } from "./platform.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const port = Number(process.env.MUZI_PORT ?? 4317);
+const port = Number(process.env.SHIFENG_PORT ?? 4317);
 const baseUrl = `http://127.0.0.1:${port}`;
-const dataRoot = path.resolve(process.env.MUZI_DATA_DIR ?? defaultDataRoot());
+const dataRoot = path.resolve(process.env.SHIFENG_DATA_DIR ?? defaultDataRoot());
 const logsDir = path.join(dataRoot, "logs");
-const pidFile = path.join(dataRoot, "muzi-workspace.pid");
-const startLockFile = path.join(dataRoot, "muzi-workspace.starting");
+const pidFile = path.join(dataRoot, "shifeng-workspace.pid");
+const startLockFile = path.join(dataRoot, "shifeng-workspace.starting");
 const serverFile = path.join(projectRoot, "dist-server", "server", "index.js");
 const webFile = path.join(projectRoot, "dist", "index.html");
 
@@ -20,14 +20,14 @@ fs.mkdirSync(logsDir, { recursive: true });
 
 if (canReuse(await healthStatus())) {
   maybeOpenBrowser();
-  console.log(`木子工作台已经在运行：${baseUrl}`);
+  console.log(`拾峰工作台已经在运行：${baseUrl}`);
   process.exit(0);
 }
 
 const launchLock = await acquireLaunchLock();
 if (launchLock === null) {
   maybeOpenBrowser();
-  console.log(`木子工作台已经在运行：${baseUrl}`);
+  console.log(`拾峰工作台已经在运行：${baseUrl}`);
   process.exit(0);
 }
 const releaseLaunchLock = () => {
@@ -40,14 +40,14 @@ process.once("exit", releaseLaunchLock);
 const existingStatus = await healthStatus();
 if (canReuse(existingStatus)) {
   maybeOpenBrowser();
-  console.log(`木子工作台已经在运行：${baseUrl}`);
+  console.log(`拾峰工作台已经在运行：${baseUrl}`);
   process.exit(0);
 }
 
 if (existingStatus) {
   if (!existingStatus.instanceId) {
     console.error(`端口 ${port} 正被开发服务器或手动启动的服务占用（没有启动器记录）。`);
-    console.error("请先关闭正在运行的 npm run dev 或 npm start，再重新启动木子工作台。");
+    console.error("请先关闭正在运行的 npm run dev 或 npm start，再重新启动拾峰工作台。");
     process.exit(1);
   }
   console.log("检测到后台服务使用的是旧版页面资源，正在安全保存并自动更新……");
@@ -76,10 +76,10 @@ const child = spawn(process.execPath, [serverFile], {
   env: {
     ...process.env,
     NODE_ENV: "production",
-    MUZI_PORT: String(port),
-    MUZI_DATA_DIR: dataRoot,
-    MUZI_BUILD_ID: buildId,
-    MUZI_INSTANCE_ID: instanceId,
+    SHIFENG_PORT: String(port),
+    SHIFENG_DATA_DIR: dataRoot,
+    SHIFENG_BUILD_ID: buildId,
+    SHIFENG_INSTANCE_ID: instanceId,
   },
   stdio: ["ignore", logDescriptor, logDescriptor],
 });
@@ -89,9 +89,9 @@ fs.writeFileSync(pidFile, JSON.stringify({ pid: child.pid, projectRoot, buildId,
 
 for (let attempt = 0; attempt < 80; attempt += 1) {
   const status = await healthStatus();
-  if (status?.application === "muzi-workspace" && status.buildId === buildId && status.instanceId === instanceId) {
+  if (status?.application === "shifeng-workspace" && status.buildId === buildId && status.instanceId === instanceId) {
     maybeOpenBrowser();
-    console.log(`木子工作台已启动：${baseUrl}`);
+    console.log(`拾峰工作台已启动：${baseUrl}`);
     console.log(`数据目录：${dataRoot}`);
     process.exit(0);
   }
@@ -119,7 +119,7 @@ function canReuse(status) {
   return Boolean(
     status
       && buildId
-      && status.application === "muzi-workspace"
+      && status.application === "shifeng-workspace"
       && status.buildId === buildId,
   );
 }
@@ -146,7 +146,7 @@ async function stopStaleService(status) {
     );
 
   if (!recordedProcessMatches) {
-    console.error(`端口 ${port} 上存在无法确认身份的服务。为保护其他程序，木子工作台没有结束该进程。`);
+    console.error(`端口 ${port} 上存在无法确认身份的服务。为保护其他程序，拾峰工作台没有结束该进程。`);
     process.exit(1);
   }
 
@@ -230,7 +230,7 @@ function removePidRecord(pid) {
 }
 
 function maybeOpenBrowser() {
-  if (process.env.MUZI_NO_OPEN === "1") return;
+  if (process.env.SHIFENG_NO_OPEN === "1") return;
   const { command, args } = browserOpenCommandFor(process.platform, baseUrl);
   const opener = spawn(command, args, { detached: true, stdio: "ignore", windowsHide: true });
   opener.unref();
@@ -257,7 +257,7 @@ async function acquireLaunchLock() {
       await new Promise((resolve) => setTimeout(resolve, 250));
     }
   }
-  console.error("另一个木子工作台启动过程仍在进行，请稍后再试。");
+  console.error("另一个拾峰工作台启动过程仍在进行，请稍后再试。");
   process.exit(1);
 }
 

@@ -3,12 +3,12 @@ import path from "node:path";
 export function defaultDataRootFor(platform, environment, homeDirectory) {
   const platformPath = platform === "win32" ? path.win32 : path.posix;
   if (platform === "win32") {
-    return platformPath.join(environment.LOCALAPPDATA ?? environment.APPDATA ?? homeDirectory, "MuziWorkspace");
+    return platformPath.join(environment.LOCALAPPDATA ?? environment.APPDATA ?? homeDirectory, "ShifengWorkspace");
   }
   if (platform === "darwin") {
-    return platformPath.join(homeDirectory, "Library", "Application Support", "MuziWorkspace");
+    return platformPath.join(homeDirectory, "Library", "Application Support", "ShifengWorkspace");
   }
-  return platformPath.join(environment.XDG_DATA_HOME ?? platformPath.join(homeDirectory, ".local", "share"), "MuziWorkspace");
+  return platformPath.join(environment.XDG_DATA_HOME ?? platformPath.join(homeDirectory, ".local", "share"), "ShifengWorkspace");
 }
 
 export function npmCommandFor(platform) {

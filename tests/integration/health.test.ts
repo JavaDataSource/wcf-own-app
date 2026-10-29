@@ -17,7 +17,7 @@ describe("application health", () => {
       const response = await app.inject({ method: "GET", url: "/api/health" });
       expect(response.statusCode).toBe(200);
       expect(response.json().data).toMatchObject({
-        application: "muzi-workspace",
+        application: "shifeng-workspace",
         buildId: "development",
         status: "ok",
         database: "ok",

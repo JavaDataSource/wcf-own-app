@@ -7,7 +7,7 @@ let shuttingDown = false;
 async function shutdown(signal: string) {
   if (shuttingDown) return;
   shuttingDown = true;
-  app.log.info({ signal }, "正在安全关闭木子工作台");
+  app.log.info({ signal }, "正在安全关闭拾峰工作台");
   try {
     await app.close();
   } finally {
@@ -33,7 +33,7 @@ try {
 }
 
 function removeOwnPidFile() {
-  const pidFile = path.join(getAppPaths().root, "muzi-workspace.pid");
+  const pidFile = path.join(getAppPaths().root, "shifeng-workspace.pid");
   try {
     const record = JSON.parse(fs.readFileSync(pidFile, "utf8")) as { pid?: unknown };
     if (Number(record.pid) === process.pid) fs.unlinkSync(pidFile);
